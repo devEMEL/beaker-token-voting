@@ -1,0 +1,49 @@
+{
+    "name": "Voting",
+    "methods": [
+        {
+            "name": "create",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "reg_begin"
+                },
+                {
+                    "type": "uint64",
+                    "name": "reg_end"
+                },
+                {
+                    "type": "uint64",
+                    "name": "vote_begin"
+                },
+                {
+                    "type": "uint64",
+                    "name": "vote_end"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "increment_vote",
+            "args": [],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "cast_vote",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "vote_choice"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        }
+    ],
+    "networks": {}
+}
