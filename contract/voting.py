@@ -1,6 +1,8 @@
 from pyteal import *
 from beaker import *
 from typing import Final
+import ..asset
+
 
 class Voting(Application):
 
@@ -36,6 +38,9 @@ class Voting(Application):
   # you should use min vote count instead of hard coding
   token_id = Int(235)
 
+  # Create sub app to be precompiled before allowing TEAL generation
+  asa_app: AppPrecompile = AppPrecompile(asset.Tokens())
+
   @create
   def create(self, reg_begin: abi.Uint64, reg_end: abi.Uint64, vote_begin: abi.Uint64, vote_end: abi.Uint64,):
     return Seq(
@@ -46,6 +51,20 @@ class Voting(Application):
 
       self.initialize_application_state()
     )
+
+
+  @external
+  def create_sub(self, *, output: abi.Uint64):
+    return Seq(
+      InnerTxnBuilder.Execute(self.asa_app.get_create_config()),
+      # return the app id of the newly created app
+      output.set(InnerTxn.created_application_id()),
+      # Try to read the global state
+      token_id := Token.token_id.get_external(output.get()),
+      Log(token_id.value()),
+
+    )
+
 
   @opt_in
   def register(self):
